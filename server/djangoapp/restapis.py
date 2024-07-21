@@ -1,7 +1,9 @@
 # Uncomment the imports below before you add the function code
-# import requests
+import requests
 import os
 from dotenv import load_dotenv
+from django.http import JsonResponse
+
 
 load_dotenv()
 
@@ -14,18 +16,17 @@ sentiment_analyzer_url = os.getenv(
 def get_request(endpoint, **kwargs):
     params = ""
     if(kwargs):
-        for key, value in kwargs.items():
-            params = params+key+"="+value+"&"
-
-    request_url = backend_url+endpoint+endpoint+"?"+params
-
-    print("GET from {}".format(request_url))
+        for key,value in kwargs.items():
+            params=params+key+"="+value+"&"
+    request_url = backend_url+endpoint+"?"+params
+    print("GET from {} ".format(request_url))
     try:
-        response = requets.get(request_url)
+        # Call get method of requests library with URL and parameters
+        response = requests.get(request_url)
         return response.json()
-
     except:
-        print("Network exception occured")
+        # If any error occurs
+        print("Network exception occurred")
 
 
 
@@ -41,6 +42,8 @@ def analyze_review_sentiments(text):
 
 
 def get_dealerships(request, state="All"):
+    print("Hi")
+    print(request)
     if(state == "All"):
         endpoint = "/fetchDealers"
     else:
